@@ -1,0 +1,247 @@
+<!doctype html>
+<html xmlns:th="http:www.thymeleaf.org">
+	<head>
+		<meta content="text/html" charset="utf-8">
+		<title>专科排班模板管理</title>
+		<link href="css/innerStyle.css" type="text/css" rel="stylesheet">
+		<link href="css/selectSearchable.css" type="text/css" rel="stylesheet">
+		<script src="js/vue.js"></script>
+		<script src="js/vue-router.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+	</head>
+
+
+	<body>
+		<div class="inner_body" id="departScheTable">
+			<div v-show="alertWindowsShow">
+				<div class="alert_windows_style"></div>
+				<div class="alert_content">
+					<div class="alert_tips">
+						{{alert_tip}}
+					</div>
+					<div class="alert_button alert_button1" style="float: left;background-color: #FF8C8C;" @click="alertensure">
+						确定
+					</div>
+					<div class="alert_button alert_button2" style="float: right;background-color: #6A6A6A;" @click="alertcancel">
+						取消
+					</div>
+				</div>
+			</div>
+			<!-----------标题----------->
+			<div class="inner_title">专科排班模板</div>
+			<!-----------输入----------->
+			<div class="inner_body_left">
+				<div class="inner_body_edit">
+					<div class="inner_edit_consult">
+						<div class="inner_edit_name inner_edit_name_consultPos">
+							科室
+						</div>
+						
+						<div class="select_searchable" style="width:120px;height:32px;float:right;">
+							<input placeholder="请选择..."  v-model="selectedValue0" v-bind:disabled="updatestatus" v-bind:class="{select_searchable_input1:!SelectSearchableListShow0, select_searchable_input2:SelectSearchableListShow0}" @focus="SelectSearchableInputFocus0" @blur="SelectSearchableInputBlur0" @input="textchange0"/>
+							<div class="select_searchable_list" v-show="SelectSearchableListShow0||SelectSearchableListFocus0" @mouseenter="SelectSearchableEnter0" @mouseleave="SelectSearchableLeave0">
+								<li class="select_searchable_li" v-for="list in SelectDataList0"  v-bind:value="list.id" @click="SelectedLi0(list)">{{list.departmentname}}</li>
+							</div>
+				        </div>
+						
+						<div class="consult_select_tip">
+						{{consult_tip}}
+						</div>
+					</div>
+					<div class="inner_edit_tablename">
+						<div class="inner_edit_name inner_edit_name_namePos">
+							排班模板名称
+						</div>
+						<div class="inner_input_border">
+							<input class="inner_edit_input inner_edit_namePos" name="DStable_name" v-bind:disabled="updatestatus" v-model="table_name">
+						</div>
+						<div class="name_edit_tip">
+						{{name_tip}}
+						</div>
+
+					</div>
+					<div class="inner_button_div button_neworupdate">
+						<button class="inner_button inner_button_new" @click="add_table">
+						{{button_text}}
+						</button>
+					</div>
+					<div class="inner_edit_editor">
+						<div class="inner_edit_name inner_edit_name_editorPos">
+							备注
+						</div>
+						<div class="inner_input_border">
+							<input class="inner_edit_input inner_edit_additionPos" v-model="table_note">
+						</div>
+					</div>
+					<div class="inner_button_div button_import">
+						<button class="inner_button inner_button_import" v-show="updatestatus" @click="import_page">
+							返回
+						</button>
+					</div>
+				</div>
+				
+				<div class="inner_body_table" id="printtable">
+					<div class="inner_body_table_title">
+						<strong>专科排班模板</strong>
+					</div>
+					<div class="inner_body_table_name">
+						{{table_editname}}
+					</div>
+					<div class="inner_body_tablediv">
+						<table class="inner_body_table_style" cellspacing="0">
+							<tr class="inner_body_table_tr">
+								<th class="clear_button_div"><div class="clear_button" v-show="table_output" @click="clear_table">清空</div></th>
+								<th class="inner_body_table_th">周一</th>
+								<th class="inner_body_table_th">周二</th>
+								<th class="inner_body_table_th">周三</th>
+								<th class="inner_body_table_th">周四</th>
+								<th class="inner_body_table_th">周五</th>
+								<th class="inner_body_table_th">周六</th>
+								<th class="inner_body_table_th">周日</th>
+							</tr>
+							<tr class="inner_body_table_td_tr">
+								<td class="inner_body_table_td_f">上午</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[0].rowData[0].stop&&!tableData[0].rowData[0].work,inner_body_table_work:!tableData[0].rowData[0].stop&&tableData[0].rowData[0].work,inner_body_table_stop:tableData[0].rowData[0].stop}" @click="work00">
+								{{tableData[0].rowData[0].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[0].rowData[1].stop&&!tableData[0].rowData[1].work,inner_body_table_work:!tableData[0].rowData[1].stop&&tableData[0].rowData[1].work,inner_body_table_stop:tableData[0].rowData[1].stop}" @click="work01">
+								{{tableData[0].rowData[1].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[0].rowData[2].stop&&!tableData[0].rowData[2].work,inner_body_table_work:!tableData[0].rowData[2].stop&&tableData[0].rowData[2].work,inner_body_table_stop:tableData[0].rowData[2].stop}" @click="work02">
+								{{tableData[0].rowData[2].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[0].rowData[3].stop&&!tableData[0].rowData[3].work,inner_body_table_work:!tableData[0].rowData[3].stop&&tableData[0].rowData[3].work,inner_body_table_stop:tableData[0].rowData[3].stop}" @click="work03">
+								{{tableData[0].rowData[3].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[0].rowData[4].stop&&!tableData[0].rowData[4].work,inner_body_table_work:!tableData[0].rowData[4].stop&&tableData[0].rowData[4].work,inner_body_table_stop:tableData[0].rowData[4].stop}" @click="work04">
+								{{tableData[0].rowData[4].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[0].rowData[5].stop&&!tableData[0].rowData[5].work,inner_body_table_work:!tableData[0].rowData[5].stop&&tableData[0].rowData[5].work,inner_body_table_stop:tableData[0].rowData[5].stop}" @click="work05">
+								{{tableData[0].rowData[5].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[0].rowData[6].stop&&!tableData[0].rowData[6].work,inner_body_table_work:!tableData[0].rowData[6].stop&&tableData[0].rowData[6].work,inner_body_table_stop:tableData[0].rowData[6].stop}" @click="work06">
+								{{tableData[0].rowData[6].cont}}
+								</td>
+							</tr>
+							<tr class="inner_body_table_td_tr">
+								<td class="inner_body_table_td_f">下午</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[1].rowData[0].stop&&!tableData[1].rowData[0].work,inner_body_table_work:!tableData[1].rowData[0].stop&&tableData[1].rowData[0].work,inner_body_table_stop:tableData[1].rowData[0].stop}" @click="work10">
+								{{tableData[1].rowData[0].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[1].rowData[1].stop&&!tableData[1].rowData[1].work,inner_body_table_work:!tableData[1].rowData[1].stop&&tableData[1].rowData[1].work,inner_body_table_stop:tableData[1].rowData[1].stop}" @click="work11">
+								{{tableData[1].rowData[1].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[1].rowData[2].stop&&!tableData[1].rowData[2].work,inner_body_table_work:!tableData[1].rowData[2].stop&&tableData[1].rowData[2].work,inner_body_table_stop:tableData[1].rowData[2].stop}" @click="work12">
+								{{tableData[1].rowData[2].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[1].rowData[3].stop&&!tableData[1].rowData[3].work,inner_body_table_work:!tableData[1].rowData[3].stop&&tableData[1].rowData[3].work,inner_body_table_stop:tableData[1].rowData[3].stop}" @click="work13">
+								{{tableData[1].rowData[3].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[1].rowData[4].stop&&!tableData[1].rowData[4].work,inner_body_table_work:!tableData[1].rowData[4].stop&&tableData[1].rowData[4].work,inner_body_table_stop:tableData[1].rowData[4].stop}" @click="work14">
+								{{tableData[1].rowData[4].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[1].rowData[5].stop&&!tableData[1].rowData[5].work,inner_body_table_work:!tableData[1].rowData[5].stop&&tableData[1].rowData[5].work,inner_body_table_stop:tableData[1].rowData[5].stop}" @click="work15">
+								{{tableData[1].rowData[5].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[1].rowData[6].stop&&!tableData[1].rowData[6].work,inner_body_table_work:!tableData[1].rowData[6].stop&&tableData[1].rowData[6].work,inner_body_table_stop:tableData[1].rowData[6].stop}" @click="work16">
+								{{tableData[1].rowData[6].cont}}
+								</td>
+							</tr>
+							<tr class="inner_body_table_td_tr">
+								<td class="inner_body_table_td_f">晚上</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[2].rowData[0].stop&&!tableData[2].rowData[0].work,inner_body_table_work:!tableData[2].rowData[0].stop&&tableData[2].rowData[0].work,inner_body_table_stop:tableData[2].rowData[0].stop}" @click="work20">
+								{{tableData[2].rowData[0].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[2].rowData[1].stop&&!tableData[2].rowData[1].work,inner_body_table_work:!tableData[2].rowData[1].stop&&tableData[2].rowData[1].work,inner_body_table_stop:tableData[2].rowData[1].stop}" @click="work21">
+								{{tableData[2].rowData[1].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[2].rowData[2].stop&&!tableData[2].rowData[2].work,inner_body_table_work:!tableData[2].rowData[2].stop&&tableData[2].rowData[2].work,inner_body_table_stop:tableData[2].rowData[2].stop}" @click="work22">
+								{{tableData[2].rowData[2].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[2].rowData[3].stop&&!tableData[2].rowData[3].work,inner_body_table_work:!tableData[2].rowData[3].stop&&tableData[2].rowData[3].work,inner_body_table_stop:tableData[2].rowData[3].stop}" @click="work23">
+								{{tableData[2].rowData[3].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[2].rowData[4].stop&&!tableData[2].rowData[4].work,inner_body_table_work:!tableData[2].rowData[4].stop&&tableData[2].rowData[4].work,inner_body_table_stop:tableData[2].rowData[4].stop}" @click="work24">
+								{{tableData[2].rowData[4].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[2].rowData[5].stop&&!tableData[2].rowData[5].work,inner_body_table_work:!tableData[2].rowData[5].stop&&tableData[2].rowData[5].work,inner_body_table_stop:tableData[2].rowData[5].stop}" @click="work25">
+								{{tableData[2].rowData[5].cont}}
+								</td>
+								<td v-bind:class="{inner_body_table_td:!tableData[2].rowData[6].stop&&!tableData[2].rowData[6].work,inner_body_table_work:!tableData[2].rowData[6].stop&&tableData[2].rowData[6].work,inner_body_table_stop:tableData[2].rowData[6].stop}" @click="work26">
+								{{tableData[2].rowData[6].cont}}
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				
+			</div>
+			<!-----------显示列表----------->
+			<div class="inner_body_right">
+				<div class="inner_body_table_manage_title">
+					专科排班模板管理
+				</div>
+				<div class="inner_body_table_manage_body">
+					<div class="select_table">
+						<div class="inner_edit_serach_name">
+							科室
+						</div>
+						<div class="inner_edit_search_select">
+							<div class="select_searchable" style="width:100px;height:20px;float:right;">
+								<input placeholder="请选择..."  v-model="selectedValue1" v-bind:class="{select_searchable_input1:!SelectSearchableListShow1, select_searchable_input2:SelectSearchableListShow1}" @click="SelectSearchableInputFocus1" @blur="SelectSearchableInputBlur1" @input="textchange1"/>
+								<div class="select_searchable_list" v-show="SelectSearchableListShow1||SelectSearchableListFocus1" @mouseenter="SelectSearchableEnter1" @mouseleave="SelectSearchableLeave1">
+									<li class="select_searchable_li" v-for="list in SelectDataList1"  v-bind:value="list.id" @click="SelectedLi1(list)">{{list.departmentname}}</li>
+								</div>
+					        </div>
+					    </div>
+						<div class="inner_edit_serach_name">
+							名称
+						</div>
+						<input name="search_table_name" class="search_table_name" v-model="searchtablename">
+						<div class="search_button search_button_color_find" @click="searchlistget">筛选</div>
+						<div class="search_button search_button_color_reset" @click="searchlistreover">重置</div>
+					</div>
+					<div class="table_list">
+						<table class="table_list_table" cellspacing="0">
+							<tr>
+								<td class="table_list_tr table_list_head list_width1">编号</td>
+								<td class="table_list_tr table_list_head table_list_width2">科室</td>
+								<td class="table_list_tr table_list_head table_list_width3">排班模板名称</td>
+								<td class="table_list_tr table_list_head table_list_width4">创建时间</td>
+								<td class="table_list_tr table_list_head">备注</td>
+								<td class="table_list_tr table_list_head table_list_width5">操作</td>
+							</tr>
+							<tr v-for="items in tableDataShowList">
+								<td class="table_list_td">{{items.departscheexid}}</td>
+								<td class="table_list_td">{{items.departmentname}}</td>
+								<td class="table_list_td table_name_click" @click="showthistable(items)">{{items.departscheexname}}</td>
+								<td class="table_list_td">{{items.time}}</td>
+								<td class="table_list_td">{{items.note}}</td>
+								<td class="table_list_td">
+									<div class="table_option_button button_color1" @click="schelistupdate(items)">修改</div>
+									<div class="table_option_button button_color2" @click="schelistdelete(items)">删除</div>
+									<div class="table_option_button button_color3" @mousedown="printpreload(items)" @click="schelistoutput">打印</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="inner_body_table_manage_bottom">
+					<div class="inner_body_table_manage_records">
+					总行数：{{records_num}}&nbsp;每页行数：15&nbsp;
+					</div>
+					<button class="inner_body_table_manage_pageButton button_active1" @click="getlastpage">尾页</button>
+					<button class="inner_body_table_manage_pageButton button_active2" @click="getnextpage">下一页</button>
+					<button class="inner_body_table_manage_pageButton button_jump" @click="jumppage">跳转</button>
+					<div class="tianchong">/&nbsp;{{records_page}}</div>
+					<input class="inner_body_table_page_input" v-model="jump_page">
+					<button class="inner_body_table_manage_pageButton button_active4" @click="getfontpage">上一页</button>
+					<button class="inner_body_table_manage_pageButton button_active5" @click="getfirstpage">首页</button>
+				</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript" src="js/departscheex.js"></script>
+		
+	</body>
+</html>

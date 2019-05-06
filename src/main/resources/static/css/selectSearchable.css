@@ -1,0 +1,86 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+.select_searchable {
+	font-family:'宋体 常规', '宋体';
+	font-weight:400;
+	font-style:normal;
+	font-size:15px;
+}
+
+.select_searchable_input1 {
+	margin: 0;
+	top: 0px;
+	position: relative;
+	border-style: solid;
+	border-color: #A9A9A9;
+	border-width: 1px;
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.select_searchable_input2 {
+	margin: 0;
+	top: 0px;
+	position: relative;
+	border-style: solid;
+	border-color: #A9A9A9;
+	border-width: 1px;
+	border-bottom-style: none;
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.select_searchable_list {
+	width: inherit;
+	border-style: solid;
+	border-color: #A9A9A9;
+	border-width: 1px;
+	border-top-style: none;
+	background-color: white;
+	max-height: 200px;
+	overflow: auto;
+	float: left;
+	z-index: 99999;
+	position: absolute;
+}
+
+.select_searchable_list::-webkit-scrollbar {/*滚动条整体样式*/
+	width: 8px;     /*高宽分别对应横竖滚动条的尺寸*/
+	height: 8px;
+}
+
+.select_searchable_list::-webkit-scrollbar-thumb {/*滚动条里面小方块*/    
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+	background: #535353;    
+}
+
+.select_searchable_list::-webkit-scrollbar-track {/*滚动条里面轨道*/
+	-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+	border-radius: 10px;
+	background: #EDEDED;
+}
+
+.select_searchable_li {
+	list-style-type: none;
+	margin-left: 2px;
+	margin-top: 1px;
+	margin-bottom: 1px;
+	white-space: nowrap;
+	moz-user-select: -moz-none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.select_searchable_li:hover {
+	background-color: #3875d7;
+	color: white;
+}

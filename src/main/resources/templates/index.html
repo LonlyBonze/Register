@@ -1,0 +1,69 @@
+<!doctype html>
+<html xmlns:th="http:www.thymeleaf.org">
+<head>
+		<meta content="text/html" charset="utf-8">
+		<title>专科排班管理</title>
+		<link href="css/styleDefault.css" type="text/css" rel="stylesheet">
+		<script src="js/vue.js"></script>
+		<script src="js/vue-router.js"></script>
+	</head>
+
+
+	<body>
+		
+		<div class="body_div">
+			<!-- 顶部栏 -->
+	  	  	<div class="top_div">
+				<div class="logo_div">
+				 🍁挂号管理系统
+				</div>
+			</div>
+			<!-- 导航栏 -->
+			<div class="middle_div" id="nav_button_list">
+				<div class="manu_div">
+					<div class="nav_manu_div">
+						导航菜单
+					</div>
+					<div class="path_div" v-html="view_path">{{view_path}}</div>
+				</div>
+				<div class="nav_div">
+					<div>
+						<div class="nav_button" @click="reg_click">挂号登记</div>
+						<div class="nav_button" @click="inf_click">基本信息</div>
+						<div v-show="baseInf" class="son_button">
+							<li @click="innerHtml21">挂号类别</li>
+							<li @click="innerHtml22">收费类别</li>
+							<li @click="innerHtml23">医生职称</li>
+							<li @click="innerHtml24">科室管理</li>
+						</div>
+						<div class="nav_button" @click="sch_click">排班管理</div>
+						<div v-show="scheMan" class="son_button">
+							<li @click="innerHtml31">专科排班模板</li>
+							<li @click="innerHtml32">专家排班模板</li>
+							<li @click="innerHtml33">专科排班</li>
+							<li @click="innerHtml34">专家排班</li>
+							<li @click="innerHtml35">医生停诊管理</li>
+						</div>
+						<div class="nav_button" @click="inn_click">内部管理</div>
+						<div v-show="inneMag" class="son_button">
+							<li @click="innerHtml41">个人信息</li>
+							<li @click="innerHtml42">挂号员管理</li>
+						</div>
+						<div class="nav_button" @click="cal_click">查询统计</div>
+						<div v-show="searCal" class="son_button">
+							<li @click="innerHtml51">日结报表</li>
+							<li @click="innerHtml52">医生诊金提成报表</li>
+							<li @click="innerHtml53">挂号员日结汇总表</li>
+						</div>
+					</div>
+				</div>
+				<!-- 主界面 -->
+			  	<div class="con_div">
+					<iframe id="Iframe" class="iframe_div"  v-bind:src="iframe_path"></iframe>
+				</div>
+				
+			</div>
+		</div>
+		<script type="text/javascript" src="js/navDispatch.js"></script>
+	</body>
+</html>
